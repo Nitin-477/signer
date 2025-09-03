@@ -148,4 +148,4 @@ flowchart TD
 
 ## Summary
 
-The Signer App provides a seamless, secure, and user-friendly interface for message signing and verification using a headless Web3 wallet. It is suitable for any dApp or service requiring cryptographic proof of wallet ownership and message integrity.
+The Signer App provides a seamless, secure, and user-friendly interface for message signing and verification using a headless Web3 wallet. It is suitable for any App or service requiring cryptographic proof of wallet ownership and message integrity.
