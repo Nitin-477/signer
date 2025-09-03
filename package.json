@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@dynamic-labs/ethereum": "^4.30.0",
+    "@dynamic-labs/sdk-react-core": "^4.30.0",
+    "@dynamic-labs/wallet-connector-core": "^4.30.0",
+    "ethers": "^6.15.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },

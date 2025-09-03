@@ -1,35 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useCallback } from "react";
+import DynamicWallet from "./DynamicWallet";
+import MessageForm from "./components/MessageForm";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [wallet, setWallet] = useState(null);
+
+  const handleWalletConnected = useCallback((walletInfo) => {
+    setWallet(walletInfo);
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <DynamicWallet onWalletConnected={handleWalletConnected} />
+      {wallet && (
+        <>
+          <div className="wallet-banner">
+            <b>Connected:</b> <code>{wallet.address}</code>
+          </div>
+          <MessageForm
+            provider={wallet.provider}
+            walletAddress={wallet.address}
+            wallet={wallet.wallet}
+          />
+        </>
+      )}
+    </div>
+  );
 }
-
-export default App
