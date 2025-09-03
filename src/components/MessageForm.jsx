@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import useFetch from "../hooks/useFetch";
+
+const STORAGE_KEY = "signHistory";
 
 export default function MessageForm({ provider, walletAddress, wallet }) {
   const [message, setMessage] = useState("");
@@ -8,37 +11,52 @@ export default function MessageForm({ provider, walletAddress, wallet }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const api = useFetch();
+
   useEffect(() => {
-    const saved = localStorage.getItem("signHistory");
-    if (saved) {
-      try {
-        setHistory(JSON.parse(saved));
-      } catch {
-        setHistory([]);
-      }
+    const offReq = api.addRequest(({ url, options }) => {
+      options.headers = {
+        ...(options.headers || {}),
+        "X-Feature": "MessageSign",
+      };
+      return { url, options };
+    });
+    const offRes = api.addResponse((res) => res);
+    return () => {
+      offReq();
+      offRes();
+    };
+  }, [api]);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) setHistory(JSON.parse(saved));
+    } catch {
+      setHistory([]);
     }
   }, []);
 
   const saveToHistory = (entry) => {
-    const newHistory = [entry, ...history];
-    setHistory(newHistory);
-    localStorage.setItem("signHistory", JSON.stringify(newHistory));
+    const next = [entry, ...history];
+    setHistory(next);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   };
 
+  const isMessageEmpty = useMemo(() => message.trim().length === 0, [message]);
+
   const handleSign = async () => {
-    if (!message) return;
+    if (isMessageEmpty) return;
     setError(null);
     setVerificationResult(null);
     setSignature("");
     setLoading(true);
     try {
       let sig;
-        console.log("Signing with:", { provider, wallet });
       if (provider) {
         const signer = await provider.getSigner();
         sig = await signer.signMessage(message);
-      }
-      else if (wallet?.signMessage) {
+      } else if (wallet?.signMessage) {
         sig = await wallet.signMessage(message);
       } else {
         throw new Error("No signer available yet");
@@ -46,12 +64,10 @@ export default function MessageForm({ provider, walletAddress, wallet }) {
 
       setSignature(sig);
 
-      const resp = await fetch("http://localhost:3001/verify-signature", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, signature: sig }),
+      const result = await api.post("/verify-signature", {
+        message,
+        signature: sig,
       });
-      const result = await resp.json();
       setVerificationResult(result);
 
       saveToHistory({
@@ -73,6 +89,9 @@ export default function MessageForm({ provider, walletAddress, wallet }) {
     <div className="message-form">
       <div className="sign-section">
         <h2>Sign Message</h2>
+        <div className="connected">
+          <b>Wallet:</b> <code>{walletAddress}</code>
+        </div>
         <input
           type="text"
           value={message}
@@ -80,7 +99,7 @@ export default function MessageForm({ provider, walletAddress, wallet }) {
           placeholder="Enter message to sign"
           disabled={loading}
         />
-        <button onClick={handleSign} disabled={!message || loading}>
+        <button onClick={handleSign} disabled={isMessageEmpty || loading}>
           {loading ? "Signing..." : "Sign Message"}
         </button>
         {error && <div className="error">{error}</div>}

@@ -15,9 +15,6 @@ export default function App() {
       <DynamicWallet onWalletConnected={handleWalletConnected} />
       {wallet && (
         <>
-          <div className="wallet-banner">
-            <b>Connected:</b> <code>{wallet.address}</code>
-          </div>
           <MessageForm
             provider={wallet.provider}
             walletAddress={wallet.address}

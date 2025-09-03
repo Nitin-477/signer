@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   DynamicContextProvider,
   useDynamicContext,
@@ -11,12 +11,16 @@ const DYNAMIC_ID = import.meta.env.VITE_DYNAMIC_ID;
 function WalletComponent({ onWalletConnected }) {
   const { primaryWallet, handleLogOut, setShowAuthFlow, loading } =
     useDynamicContext();
-  const [provider, setProvider] = useState(null);
 
   useEffect(() => {
-    if (!primaryWallet) return;
+    if (!onWalletConnected) return;
 
-    onWalletConnected?.({
+    if (!primaryWallet) {
+      onWalletConnected(null);
+      return;
+    }
+
+    onWalletConnected({
       provider: null,
       address: primaryWallet.address,
       wallet: primaryWallet,
@@ -31,14 +35,13 @@ function WalletComponent({ onWalletConnected }) {
         if (!eip1193) return;
 
         const ethProvider = new ethers.BrowserProvider(eip1193);
-        setProvider(ethProvider);
-        onWalletConnected?.({
+        onWalletConnected({
           provider: ethProvider,
           address: primaryWallet.address,
           wallet: primaryWallet,
         });
-      } catch (error) {
-        console.error("Provider setup failed:", error);
+      } catch (err) {
+        console.error("Provider setup failed:", err);
       }
     })();
   }, [primaryWallet, onWalletConnected]);
@@ -62,7 +65,7 @@ function WalletComponent({ onWalletConnected }) {
   }
 
   return (
-    <div className="wallet-info">      
+    <div className="wallet-info">
       <button onClick={handleLogOut} className="disconnect-button">
         Disconnect
       </button>
