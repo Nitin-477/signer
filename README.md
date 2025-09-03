@@ -68,19 +68,21 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    A[User opens app] --> B[Clicks "Connect Wallet"]
-    B --> C[Dynamic.xyz Headless Auth Flow]
-    C --> D[Wallet Connected]
-    D --> E[User enters message]
-    E --> F[User clicks "Sign Message"]
-    F --> G[Wallet signs message]
-    G --> H[Signature returned]
-    H --> I[Send {message, signature} to backend]
-    I --> J[Backend verifies signature]
-    J --> K[Return verification result]
-    K --> L[Show result to user]
-    L --> M[Save to local signing history]
-    M --> N[User can view signing history]
+  A[User opens app] --> B["Clicks &quot;Connect Wallet&quot;"]
+  B --> C[Dynamic.xyz Headless Auth Flow]
+  C --> D[Wallet Connected]
+  D --> E[User enters message]
+  E --> F["User clicks &quot;Sign Message&quot;"]
+  F --> G[Wallet signs message]
+  G --> H[Signature returned]
+  H --> I["Send &#123;message, signature&#125; to backend"]
+  I --> J[Backend verifies signature]
+  J --> K[Return verification result]
+  K --> L[Show result to user]
+  L --> M[Save to local signing history]
+  M --> N[User can view signing history]
+
+
 ```
 
 ---
