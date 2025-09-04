@@ -123,7 +123,7 @@ describe('fetchClient core behavior', () => {
   })
 
   it('runs response interceptors and can replace response', async () => {
-    const serverJson = { ok: true }
+    const serverJson = { ok: true };
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
       status: 200,
