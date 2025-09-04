@@ -24,7 +24,7 @@ jest.mock('ethers', () => {
     } as any,
   }
 })
-import DynamicWallet from '../components/DynamicWallet'
+import DynamicWallet from '../DynamicWallet'
 import { useDynamicContext } from '@dynamic-labs/sdk-react-core'
 import { BrowserProvider } from 'ethers'
 

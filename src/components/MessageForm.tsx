@@ -95,6 +95,7 @@ export default function MessageForm({ provider, walletAddress, wallet }: Props) 
         walletAddress,
         verification: result,
       })
+      setMessage('')
     } catch (e: any) {
       console.error(e)
       setError(e?.message || 'Signing failed')

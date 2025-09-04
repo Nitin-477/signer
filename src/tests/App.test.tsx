@@ -5,7 +5,7 @@ import { BrowserProvider } from 'ethers'
 import App from '../App'
 import type { ConnectedWallet } from '../types'
 
-jest.mock('../DynamicWallet', () => {
+jest.mock('../components/DynamicWallet', () => {
   return function MockedDynamicWallet({ onWalletConnected }: { onWalletConnected: (wallet: ConnectedWallet | null) => void }) {
     const handleConnect = () => {
       const mockWallet: ConnectedWallet = {
