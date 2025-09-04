@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { DynamicContextProvider, useDynamicContext } from '@dynamic-labs/sdk-react-core'
 import { EthereumWalletConnectors } from '@dynamic-labs/ethereum'
 import { ethers, BrowserProvider } from 'ethers'
-import type { ConnectedWallet } from './types'
+import type { ConnectedWallet } from '../types'
 
 const DYNAMIC_ID = import.meta.env.VITE_DYNAMIC_ID
 

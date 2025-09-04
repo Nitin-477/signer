@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import DynamicWallet from './DynamicWallet'
+import DynamicWallet from './components/DynamicWallet'
 import MessageForm from './components/MessageForm'
 import type { ConnectedWallet } from './types'
 import './App.css'
