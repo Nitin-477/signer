@@ -19,7 +19,7 @@ npm install
   ```
   VITE_DYNAMIC_ID=your_dynamic_xyz_environment_id
   ```
-- (Optional) If your backend is not running on `http://localhost:3001`, add:
+- (Optional) If your backend is not running on `http://localhost:3000`, add:
   ```
   VITE_API_BASE=http://your-backend-url
   ```
