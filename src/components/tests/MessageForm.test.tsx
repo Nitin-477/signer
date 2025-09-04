@@ -1,4 +1,3 @@
-// src/components/tests/MessageForm.test.tsx
 import React from 'react'
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
 import '@testing-library/jest-dom'
@@ -19,8 +18,8 @@ const localStorageMock = (() => {
     },
   }
 })()
-Object.defineProperty(window, 'localStorage', { value: localStorageMock })
 
+Object.defineProperty(window, 'localStorage', { value: localStorageMock })
 
 jest.mock('../../hooks/useFetch', () => {
   const stubs = {

@@ -19,3 +19,5 @@ const passthrough: ResponseInterceptor = async (response) => response
 
 fetchClient.addRequestInterceptor(attachAuth)
 fetchClient.addResponseInterceptor(passthrough)
+
+export { attachAuth, passthrough }

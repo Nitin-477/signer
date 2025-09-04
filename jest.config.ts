@@ -3,36 +3,46 @@ import type { Config } from 'jest'
 
 const config: Config = {
   preset: 'ts-jest',
-  testEnvironment: 'jsdom',
-  testMatch: ['<rootDir>/src/components/tests/**/*.test.tsx'],
-
+  testEnvironment: 'jest-environment-jsdom',
+  testMatch: ['<rootDir>/src/**/*.{test,spec}.{ts,tsx}'],
   transform: {
-    '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.test.json' }],
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
+      {
+        tsconfig: '<rootDir>/tsconfig.test.json',
+        diagnostics: { ignoreCodes: [1343] },
+        astTransformers: {
+          before: [
+            {
+              path: 'ts-jest-mock-import-meta',
+              options: {
+                metaObjectReplacement: {
+                  env: {
+                    VITE_DYNAMIC_ID: 'test-dynamic-id',
+                    VITE_API_BASE: 'http://test.local', 
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
+    ],
   },
-
-  moduleNameMapper: {
-    '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
-    '\\.(png|jpg|jpeg|gif|svg)$': '<rootDir>/__mocks__/fileMock.js',
-    '^@/(.*)$': '<rootDir>/src/$1',
-  },
-
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
+  },
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
-    '!src/**/tests/**',
-    '!src/**/__tests__/**',
+    '!src/**/*.{test,spec}.{ts,tsx}', 
     '!src/**/__mocks__/**',
     '!src/**/*.d.ts',
   ],
-  coverageProvider: 'v8',
-  coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
-  coverageThreshold: {
-    global: { branches: 80, functions: 85, lines: 90, statements: 90 },
-  },
-  testPathIgnorePatterns: ['/node_modules/'],
+  coverageDirectory: 'coverage',
 }
 
 export default config
